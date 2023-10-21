@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="mainfunction.js"></script>
+    <script type="text/javascript" src="mainvariables.js"></script>
+    <script type="text/javascript" src="image.html"></script>
+    <script type="text/javascript" src="mainobjects.js"></script>
+
+    <style>
+        canvas {
+            position:fixed;
+        }
+        body {
+            margin:0;
+            background-image: url("background.jpg");
+        }
+    </style>
+</head>
+<body onload = "startGame()">
+    <img src = "ship.png" width = "0" height = "0" id = "ship">
+    <img src = "supship.png" width = "0" height = "0" id = "supship">
+    <img src = "bullet.png" width = "0" height = "0" id = "bullet">
+    <img src = "enemy.png" width = "0" height = "0" id = "enemy">
+    <img src = "enemyA.png" width = "0" height = "0" id = "enemyA">
+    <img src = "enemyB.png" width = "0" height = "0" id = "enemyB">
+    <img src = "enemyC.png" width = "0" height = "0" id = "enemyC">
+    <img src = "enemyD.png" width = "0" height = "0" id = "enemyD">
+    <img src = "eliteA.png" width = "0" height = "0" id = "eliteA">
+    <img src = "eliteB.png" width = "0" height = "0" id = "eliteB">
+    <img src = "eliteC.png" width = "0" height = "0" id = "eliteC">
+    <img src = "eliteD.png" width = "0" height = "0" id = "eliteD">
+    <img src = "explode.png" width = "0" height = "0" id = "explode">
+    <img src = "shoot.png" width = "0" height = "0" id = "shoot">
+    <img src = "sup.png" width = "0" height = "0" id = "sup">
+    <img src = "warning.png" width = "0" height = "0" id = "warning">
+    <img src = "nucup.png" width = "0" height = "0" id = "nucup">
+    <img src = "nucdown.png" width = "0" height = "0" id = "nucdown">
+    <img src = "buff1.png" width = "0" height = "0" id = "buff1">
+    <img src = "buff2.png" width = "0" height = "0" id = "buff2">
+    <img src = "shield.png" width = "0" height = "0" id = "buff3">
+    <img src = "shieldburst.png" width = "0" height = "0" id = "shieldburst">
+
+    <script> 
+        var shipImg = document.getElementById("ship");
+        var bulletImg = document.getElementById("bullet");
+        var enemyImg = document.getElementById("enemy");
+        var enemyAImg = document.getElementById("enemyA");
+        var enemyBImg = document.getElementById("enemyB");
+        var enemyCImg = document.getElementById("enemyC");
+        var enemyDImg = document.getElementById("enemyD");
+        var eliteAImg = document.getElementById("eliteA");
+        var eliteBImg = document.getElementById("eliteB");
+        var eliteCImg = document.getElementById("eliteC");
+        var eliteDImg = document.getElementById("eliteD");
+        var explodeImg = document.getElementById("explode");
+        var shootImg = document.getElementById("shoot");
+        var supEnemyImg = document.getElementById("sup");
+        var warningImg = document.getElementById("warning");
+        var nucupImg = document.getElementById("nucup");
+        var nucdownImg = document.getElementById("nucdown");
+        var supshipImg = document.getElementById("supship");
+        var buff1Img = document.getElementById("buff1");
+        var buff2Img = document.getElementById("buff2");
+        var buff3Img = document.getElementById("buff3");
+        var shieldburstImg = document.getElementById("shieldburst");
+   
+        var booms = [];
+        var bullets = [];
+        var missles = [];
+        var shoots = [];
+        var buffs = [];
+        var enemyAs = []
+        var enemyBs = []
+        var enemyCs = []
+        var enemyDs = []
+        var enemyDs = []
+        var eliteAs = [];
+        var eliteBs = [];
+        var eliteCs = [];
+        var eliteDs = [];
+
+        var enemybullets = []
+
+        var helper = 0;
+        var hprecove = 500;
+        var bufffreq = 500;
+        var bufftime = 50;
+        var tp = 0;
+        var round = 0;
+        var hpp = 2100;
+        var buff1;
+        var buff2;
+        var buff3 = 0;
+        var shiphp = 5;
+        var wave = 0;
+
+        var wave0 = 0;
+        var wave1 = 0;
+        var wave2 = 0;
+        var wave3 = 0;
+        var wave4 = 0;
+        var wave5 = 0;
+        var wave6 = 0;
+        var wave7 = 0;
+        var wave8 = 0;
+        var wave9 = 0;
+        var wave10 = 0;
+        var wave11 = 0;
+        var wave12 = 0;
+        var wave13 = 0;
+        var wave14 = 0;
+        var wave15 = 0;
+
+        var slice = 0;
+        var damage =1;
+        var area = {
+            canvas : document.createElement("canvas"),
+            start : function(){
+                this.canvas.width = 1370;
+                this.canvas.height = 670;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas,document.body.childNodes[0])
+                this.interval = setInterval(updateArea,20)
+                window.addEventListener('keydown', function (e) {
+                area.keys = (area.keys || []);
+                area.keys[e.keyCode] = true;
+                })
+                window.addEventListener('keyup', function (e) {
+                area.keys[e.keyCode] = false;
+                })            
+            },
+                    
+            clear: function(){
+                this.context.clearRect(0,0,this.canvas.width,this.canvas.height)
+            }
+        }
+
+
+        function EnemyA(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = -100;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.maxlife = life;
+            this.time = time;
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(enemyAImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                if (this.y<y){
+                    this.y+=1;
+                }
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+
+            }
+            this.fire = function(){
+                bullet = new Bullet(this.x+25,this.y,10,0+this.speedx,5)
+                bullets.push(bullet)
+            }
+        }
+
+        function EnemyB(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = -100;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(enemyBImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                if (this.y<y){
+                    this.y+=1;
+                }
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+
+            }
+            this.fire = function(){
+                bullet = new Bullet(this.x+25,this.y,10,-1.5+this.speedx,5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,10,1.5+this.speedx,5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,10,this.speedx,5)
+                bullets.push(bullet)
+                
+            }
+        }
+
+        function EnemyC(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = -100;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(enemyCImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                if (this.y<y){
+                    this.y+=1;
+                }
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+
+            }
+            this.fire = function(){
+                let disx = ship.x-(this.x+25)
+                let disy = ship.y-(this.y)
+                let unit = 12/(Math.abs(disx)+Math.abs(disy))
+                let bx = unit*disx
+                let by = unit*disy
+                bullet = new Bullet(this.x+25,this.y,10,bx,by)
+                bullets.push(bullet)
+
+                
+            }
+        }
+
+        function EnemyD(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(enemyDImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                this.y+=this.speedy;
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+                if (this.y>400){this.y=399;this.speedy*=-1}
+                if (this.y<0){this.y=1;this.speedy*=-1}
+
+            }
+            this.fire = function(){
+                bullet = new Bullet(this.x+25,this.y,5,10,0)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,5,5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,0,10)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,-5,5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,-10,0)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,-5,-5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,0,-10)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,5,-5)
+                bullets.push(bullet)
+            }
+        }
+
+        function EliteA(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(eliteAImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                this.y+=this.speedy;
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+                if (this.y>400){this.y=399;this.speedy*=-1}
+                if (this.y<0){this.y=1;this.speedy*=-1}
+
+            }
+            this.fire = function(){
+                bullet = new Bullet(this.x+30,this.y,15,0,10,2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+10,this.y-10,15,0,10,2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+50,this.y-10,15,0,10,2)
+                bullets.push(bullet)
+                
+            }
+        }
+
+        function EliteB(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(eliteBImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                this.y+=this.speedy;
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+                if (this.y>400){this.y=399;this.speedy*=-1}
+                if (this.y<0){this.y=1;this.speedy*=-1}
+
+            }
+            this.fire = function(){
+                bullet = new Bullet(this.x+30,this.y,15,0,1,2,0,0.5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x,this.y,15,-1,1,2,-0.1,0.5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+60,this.y,15,1,1,2,0.1,0.5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x,this.y,15,-3,1,2,-0.2,0.5)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+60,this.y,15,3,1,2,0.2,0.5)
+                bullets.push(bullet)
+                
+            }
+        }
+
+        function EliteC(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(eliteCImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                this.y+=this.speedy;
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+                if (this.y>400){this.y=399;this.speedy*=-1}
+                if (this.y<0){this.y=1;this.speedy*=-1}
+
+            }
+            this.fire = function(){
+                let disx = ship.x-(this.x+25)
+                let disy = ship.y-(this.y)
+                let unit = 20/(Math.abs(disx)+Math.abs(disy))
+                let bx = unit*disx
+                let by = unit*disy
+                bullet = new Bullet(this.x+25,this.y,10,bx,by,2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,10,bx*1.2,by,2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,10,bx*0.8,by,2)
+                bullets.push(bullet)
+                
+            }
+        }
+
+        function EliteD(x,y,width,height,speedx,speedy,life,time){
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.speedx = speedx;
+            this.speedy = speedy;
+            this.life = life;
+            this.time = time;
+            this.maxlife = life;
+
+            this.update = function(){
+                ctx=area.context;
+                ctx.fillStyle = "red"
+                //  ctx.fillRect(this.x,this.y,this.width,this.height)
+                ctx.drawImage(eliteDImg,this.x-2,this.y-45,65,100)
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x,this.y+20,60,5)
+                ctx.fillStyle = "green"
+
+                ctx.fillRect(this.x,this.y+20,60/this.maxlife*this.life,5)
+
+            }
+            this.move = function(){
+                this.x+=this.speedx;
+                this.y+=this.speedy;
+                if (this.x>1300){this.x=1299;this.speedx*=-1}
+                if (this.x<70){this.x=71;this.speedx*=-1}
+                if (this.y>400){this.y=399;this.speedy*=-1}
+                if (this.y<0){this.y=1;this.speedy*=-1}
+
+            }
+            this.fire = function(){
+                bullet = new Bullet(this.x+25,this.y,5,10,0,2,-0.2,0.2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,5,5,2,-0.1,0.2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,0,10,2,0,0.2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,-5,5,2,0.1,0.2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,-10,0,2,0.2,0.2)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,-5,-5,2,0.1,0.4)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,0,-10,2,0,0.8)
+                bullets.push(bullet)
+                bullet = new Bullet(this.x+25,this.y,5,5,-5,2,-0.1,0.4)
+                bullets.push(bullet)
+                
+            }
+        }
+
+        function Buff(x,y,type,time){
+            this.x = x;
+            this.y = y;
+            this.type = type;
+            this.time = time+bufftime;
+            this.update = function(){
+                if (this.time<round){
+                    buff1 = false
+                    buff2 = false
+                }
+                if (this.type ==0){
+                    ctx.fillStyle = "gold"
+                    ctx.fillRect(this.x,this.y,50,50)
+                    ctx.drawImage(buff1Img,this.x+5,this.y-10,40,75)
+                }
+                if (this.type ==1){
+                    ctx.fillStyle = "gold";
+                    ctx.fillRect(this.x,this.y,50,50)
+                    ctx.drawImage(buff2Img,this.x+8,this.y-10,35,70)
+                }
+                if (this.type ==2){
+                    ctx.fillStyle = "gold";
+                    // ctx.fillRect(this.x,this.y,50,50)
+                    ctx.drawImage(buff3Img,this.x+2,this.y-10,48,70)
+                }
+                
+            }
+            this.get = function(){
+                if (ship.x+ship.d*2>this.x &&ship.y+ship.d*2>this.y && ship.x<this.x +50&& ship.y<this.y+50){
+                    buffs = []
+                    if (this.type ==2){
+                        buff3 +=1;
+                    }
+                    if (this.type ==1){
+                        buff2 =true;
+                    }
+                    if (this.type ==0){
+                        buff1 = true;
+                    }
+                }
+            }
+        }
+        function Enemy(x,hp){
+            ctx = area.context;
+            this.x = x;
+            this.hp = 2100;
+            this.s = 0.6;
+            this.y = -600;
+            this.update = function(){
+                if (this.y>=-400){
+                    ctx.drawImage(enemyImg,180+this.x,this.y)
+                }
+                else{
+                    ctx.drawImage(supEnemyImg,175+this.x,this.y)
+                }
+            }
+            this.move = function(){
+                if (this.x>200||this.x<-200){
+                    this.s*=-1
+                }
+                if (this.y<-400){
+                    this.y+=1;
+                }
+                else{
+                this.x+=this.s;
+                }
+            }
+            this.life = function(){
+                ctx.fillStyle = "gray"
+                ctx.fillRect(380+this.x,this.y+420,570,20);
+                ctx.fillStyle = "red"
+                ctx.fillRect(380+this.x,this.y+420,570/hpp*this.hp,20);
+                if (this.hp<0){
+                    round = 2000
+                    // while (true){
+                    // let newtp = Math.trunc(Math.random()*6);
+                    // if (newtp!=tp){tp = newtp;break}
+                    // }
+                    tp+=1
+                    if(tp>5){
+                        alert("you win!")
+                    }
+                    switch (tp){
+                        case 0:
+                            this.hp = 2100;
+                            hpp = 2100;
+                            break;
+                        case 1:
+                            this.hp = 2200;
+                            hpp = 2200;
+                            break;
+                        case 2:
+                            this.hp = 2200;
+                            hpp = 2200;
+                            break;
+                        case 3:
+                            this.hp = 1600;
+                            hpp = 1600;
+                            break;
+                        case 4:
+                            this.hp = 1800;
+                            hpp = 1800;
+                            break;
+                        case 5:
+                            this.hp = 1800;
+                            hpp = 1800;
+                            break;
+                    }
+                    bullets=[];missles=[];shoots = [];booms = []
+                }
+            }
+            this.createA = function(){
+                // bullet = new Bullet(Math.random()*1170+100,0,10,Math.random()*10-5,3)
+                // if (round %2==0){
+                bullet = new Bullet(Math.random()*90+340+this.x,this.y+560,10,Math.random()*15-5,Math.random()*8-2)
+                bullets.push(bullet)
+                bullet = new Bullet(Math.random()*90+875+this.x,this.y+560,10,Math.random()*15-5,Math.random()*8-2)
+                bullets.push(bullet)
+                // }
+            },
+            this.createB = function(){
+                if (round%3==0){
+                    if (round%1200<400){
+                        bullet = new Bullet(Math.random()*1170+100,0,10,0,1,1,0,0.3)
+                        bullets.push(bullet)
+                    }
+                    if (round%1200>400&&round%1200<800){
+                        bullet = new Bullet(0,Math.random()*670+100,10,1,0,1,0.2,0)
+                        bullets.push(bullet)
+                    }
+                    if (round%1200>800){
+                        bullet = new Bullet(1380,Math.random()*670+100,10,-1,0,1,-0.2,0)
+                        bullets.push(bullet)
+                    }
+                }
+            },
+            this.createC = function(){
+                let rand = Math.floor((Math.random()*20))
+                if (rand == 2){
+                    missle = new Missle(Math.random()*90+340+this.x,this.y+560,5,(Math.random()*5+2))
+                    missles.push(missle)
+                }
+                if (rand == 3){
+                    missle = new Missle(Math.random()*90+875+this.x,this.y+560,5,(Math.random()*5+2))
+                    missles.push(missle)
+                }
+            },
+            this.createD = function(){
+                if (round%12 == 3){
+                    if (round%400>100){
+                        let disx = ship.x-(this.x+220)
+                        let disy = ship.y-100
+                        let unit = 12/(Math.abs(disx)+Math.abs(disy))
+                        let speedx = unit*disx
+                        let speedy = unit*disy
+                        bullet = new Bullet(this.x+220,this.y+500,10,speedx,speedy)
+                        bullets.push(bullet)
+                        bullet = new Bullet(this.x+220,this.y+500,10,speedx+1,speedy)
+                        bullets.push(bullet)
+                        bullet = new Bullet(this.x+220,this.y+500,10,speedx-1,speedy)
+                        bullets.push(bullet)
+                    }
+                    if (round%400<300){
+                        let disx2 = ship.x-(this.x+1090)
+                        let disy2 = ship.y-100
+                        let unit2 = 12/(Math.abs(disx2)+Math.abs(disy2))
+                        let speedx2 = unit2*disx2
+                        let speedy2 = unit2*disy2
+                        bullet = new Bullet(this.x+1075,this.y+500,10,speedx2,speedy2)
+                        bullets.push(bullet)
+                        bullet = new Bullet(this.x+1075,this.y+500,10,speedx2-1,speedy2)
+                        bullets.push(bullet)
+                        bullet = new Bullet(this.x+1075,this.y+500,10,speedx2+1,speedy2)
+                        bullets.push(bullet)
+                    }
+                }
+
+            },
+            this.createE = function(){
+                if(round%50==0){
+                    for (let i = 0;i<41;i++){
+                        bullet = new Bullet(690+this.x,this.y+500,10,-10+i/2,(-Math.abs(20-i)+40)/15)
+                        bullets.push(bullet)
+                        bullet = new Bullet(690+this.x+50,this.y+500,10,-10+i/2,(-Math.abs(20-i)+40)/15)
+                        bullets.push(bullet)
+                    }
+                }
+            },
+            this.createF = function(){
+                if (round%12 ==11){
+                    // boom = new Boom(Math.random()*700,Math.random()*200+200,440,200,round)
+                    boom = new Boom(ship.x-220+Math.random()*400-200,ship.y-100+Math.random()*200-100,440,200,round)
+                    booms.push(boom)
+
+                }
+            }
+
+        }
+        function Ship(x,y,d,sx=5,sy=5,hp = 5,maxhp=5){
+            this.x = x;
+            this.y = y;
+            this.d = d;
+            this.speedX = 0;
+            this.speedY = 0;
+            this.sx = sx;
+            this.sy = sy;
+            this.hp = hp;
+            this.maxhp = maxhp;
+            this.update = function(){
+                ctx = area.context;
+                ctx.fillStyle = "red"
+                if (round%hprecove==0&&this.hp<this.maxhp){
+                    this.hp+=1
+                }
+                if (buff3!=0){
+                    for (let i =0;i<buff3;i++){
+                    ctx.drawImage(supshipImg,this.x-39,this.y-52,85,120);
+                    }   
+
+                }
+                else{
+                    
+                ctx.drawImage(shipImg,this.x-19,this.y-35);
+                }
+                ctx.fillStyle = "gray"
+                ctx.fillRect(this.x-21,this.y+30,50,5)
+                ctx.fillStyle = "green"
+                ctx.fillRect(this.x-21,this.y+30,50/this.maxhp*this.hp,5);
+                
+            }
+            this.move = function(){
+                this.speedX = 0;
+                this.speedY = 0;
+                if (area.keys && area.keys[37] && this.x>25) {this.speedX = -this.sx; }
+                if (area.keys && area.keys[39] && this.x<1335) {this.speedX = this.sx; }
+                if (area.keys && area.keys[38] && this.y>200) {this.speedY = -this.sy; }
+                if (area.keys && area.keys[40] && this.y<600) {this.speedY = this.sy; }
+                this.x+=this.speedX;
+                this.y+=this.speedY;
+            }
+            
+        }      
+        function Boom(x,y,sizex,sizey,time){
+            this.x = x;
+            this.y = y;
+            this.sizex = sizex;
+            this.sizey = sizey;
+            this.time = time+75;
+            this.bx = enemy.x+630
+            this.by = 80;
+            this.bs = -5;
+            this.update = function(){
+                ctx.fillStyle = "red";
+                // ctx.fillRect(this.bx,this.by,20,20)
+                if (this.bs<0){
+                ctx.drawImage(nucupImg,this.bx-130,this.by-200,300,500)
+                }
+                if (this.bs>0){
+                ctx.drawImage(nucdownImg,this.bx-145,this.by-300,300,500)
+                }
+                ctx.drawImage(warningImg,this.x-280,this.y-605)
+                if (this.time<round){
+                    ctx.drawImage(explodeImg,this.x-120,this.y-200,600,600)
+
+                }
+            }
+            this.movebullet = function(){
+                this.by+=this.bs
+            }
+        }
+
+        function Shoot(x,y,sx,sy){
+            this.x = x;
+            this.y = y;
+            this.sx = sx;
+            this.sy = sy;
+            this.update = function(){
+                // ctx.fillStyle = "red"
+                // ctx.fillRect(this.x,this.y,5,5)
+                ctx.drawImage(shootImg,this.x-10,this.y-15)
+
+            }
+            this.move = function(){
+                this.x+=this.sx;
+                this.y+=this.sy;
+            }
+            this.aim = function(){
+                if (this.x>200+enemy.x && this.x<260+enemy.x && this.y<enemy.y+510&& this.y>enemy.y+410){
+                    ctx.drawImage(explodeImg,this.x-35,this.y-40)
+
+                    this.x = 999;
+                    this.y = 999;
+                    this.sx = 0;
+                    this.sy = 0;
+                    enemy.hp-=damage;
+                    
+
+                }
+                if (this.x>1040+enemy.x && this.x<1100+enemy.x && this.y<enemy.y+510&& this.y>enemy.y+410){
+                    ctx.drawImage(explodeImg,this.x-35,this.y-40)
+
+                    this.x = 999;
+                    this.y = 999;
+                    this.sx = 0;
+                    this.sy = 0;
+                    enemy.hp-=damage;
+
+                }
+                if (this.x>340+enemy.x && this.x<430+enemy.x && this.y<enemy.y+580&& this.y>enemy.y+500){
+                    ctx.drawImage(explodeImg,this.x-35,this.y-40)
+
+                    this.x = 999;
+                    this.y = 999;
+                    this.sx = 0;
+                    this.sy = 0;
+                    enemy.hp-=damage;
+                    
+                }
+                if (this.x>875+enemy.x && this.x<965+enemy.x && this.y<enemy.y+580&& this.y>enemy.y+500){
+                    ctx.drawImage(explodeImg,this.x-35,this.y-40)
+
+                    this.x = 999;
+                    this.y = 999;
+                    this.sx = 0;
+                    this.sy = 0;
+                    enemy.hp-=damage;
+                }
+            }
+                
+            
+        }
+        function Bullet(x,y,d,sx,sy,type =1,ax = 0,ay = 0){
+            this.x = x;
+            this.y = y;
+            this.d = d;
+            this.sx = sx;
+            this.sy = sy;
+            this.type = type;
+            this.ax = ax;
+            this.ay = ay;
+            this.update = function(){
+                ctx = area.context;
+                ctx.fillStyle = "blue"
+                if (type ==1){
+                ctx.drawImage(bulletImg,this.x-8,this.y-13);
+                }
+                else if(type ==2){
+                    ctx.drawImage(explodeImg,this.x-5,this.y-15,20,40);
+                }
+
+                // ctx.fillRect(this.x,this.y,this.d,this.d)
+            }
+            this.move = function(){
+                this.sx+=this.ax;
+                this.sy+=this.ay
+                this.x+=this.sx;
+                this.y+=this.sy;
+            }
+        }
+
+        function Missle(x,y,d,s){
+            this.x = x;
+            this.y = y;
+            this.d = d;
+            this.s = s;
+            this.speedx =0
+            this.speedy =0
+            this.update = function(){
+                ctx = area.context;
+                ctx.fillStyle = "blue"
+                ctx.drawImage(explodeImg,this.x-12,this.y-18,20,40);
+                
+                // ctx.fillRect(this.x,this.y,this.d,this.d)
+            }
+            this.move = function(){
+                let disx = ship.x-this.x
+                let disy = ship.y-this.y
+                let unit = s/(Math.abs(disx)+Math.abs(disy))
+                this.speedx = unit*disx
+                this.speedy = unit*disy
+                this.x+=this.speedx;
+                this.y+=this.speedy;
+            }
+        }
+        
+        function startGame(){
+            ctx= area.context;
+            area.start();
+            ship = new Ship(600,300,10)
+            enemy = new Enemy(2,hpp)
+        }
+        function CreateEnemyA(){
+            enemyA = new EnemyA(Math.random()*1000+180,Math.random()*150+20,60,20,Math.random()*4-2,0,5+wave*2,Math.floor(Math.random()*70));
+            enemyAs.push(enemyA) 
+        }
+        function updateEnemyA(){
+            for (let i = 0;i<enemyAs.length;i++){
+                enemyAs[i].move();
+                enemyAs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (enemyAs[i].x+enemyAs[i].width>shoots[u].x && enemyAs[i].x<shoots[u].x && enemyAs[i].y+enemyAs[i].height>shoots[u].y && enemyAs[i].y<shoots[u].y){enemyAs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (enemyAs[i].life<0){
+                    enemyAs.splice(i,1)
+                }
+                if (round%100<30+enemyAs[i].time && round%100>0+enemyAs[i].time){
+                    enemyAs[i].speedx=0;
+
+                    if (round%5==4){
+                        if (enemyAs[i].y>0){
+                            enemyAs[i].fire()
+                        }
+                    }
+                }
+                else if (round%100==30+enemyAs[i].time){enemyAs[i].speedx = Math.random()*4-2}
+                
+            }
+        }
+
+
+        function CreateEnemyB(){
+            enemyB = new EnemyB(Math.random()*1000+180,Math.random()*100+20,60,20,Math.random()*4-2,0,15+wave*2,Math.floor(Math.random()*100));
+            enemyBs.push(enemyB) 
+        }
+        function updateEnemyB(){
+            for (let i = 0;i<enemyBs.length;i++){
+                enemyBs[i].move();
+                enemyBs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (enemyBs[i].x+enemyBs[i].width>shoots[u].x && enemyBs[i].x<shoots[u].x && enemyBs[i].y+enemyBs[i].height>shoots[u].y && enemyBs[i].y<shoots[u].y){enemyBs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (enemyBs[i].life<0){
+                    enemyBs.splice(i,1)
+
+                }
+                if (round%130<30+enemyBs[i].time && round%130>0+enemyBs[i].time){
+                    enemyBs[i].speedx=0;
+
+                    if (round%8==4){
+                        if (enemyBs[i].y>0){
+                            enemyBs[i].fire()
+                        }
+                    }
+                }
+                else if (round%130==30+enemyBs[i].time){enemyBs[i].speedx = Math.random()*4-2}
+                
+            }
+        }
+
+
+        function CreateEnemyC(){
+            enemyC = new EnemyC(Math.random()*1000+180,Math.random()*100+20,60,20,Math.random()*4-2,0,20+wave*2,Math.floor(Math.random()*100));
+            enemyCs.push(enemyC) 
+        }
+        function updateEnemyC(){
+            for (let i = 0;i<enemyCs.length;i++){
+                enemyCs[i].move();
+                enemyCs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (enemyCs[i].x+enemyCs[i].width>shoots[u].x && enemyCs[i].x<shoots[u].x && enemyCs[i].y+enemyCs[i].height>shoots[u].y && enemyCs[i].y<shoots[u].y){enemyCs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (enemyCs[i].life<0){
+                    enemyCs.splice(i,1)
+
+                }
+                if (round%130<30+enemyCs[i].time && round%130>0+enemyCs[i].time){
+                    enemyCs[i].speedx=0;
+
+                    if (round%3==1){
+                        if (enemyCs[i].y>0){
+                            enemyCs[i].fire()
+                        }
+                    }
+                }
+                else if (round%130==30+enemyCs[i].time){enemyCs[i].speedx = Math.random()*4-2}
+                
+            }
+        }
+
+
+        function CreateEnemyD(){
+            enemyD = new EnemyD(Math.random()*1000+180,-100,60,20,0,3,25+wave*2,Math.floor(Math.random()*100));
+            enemyDs.push(enemyD) 
+        }
+        function updateEnemyD(){
+            for (let i = 0;i<enemyDs.length;i++){
+                enemyDs[i].move();
+                enemyDs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (enemyDs[i].x+enemyDs[i].width>shoots[u].x && enemyDs[i].x<shoots[u].x && enemyDs[i].y+enemyDs[i].height>shoots[u].y && enemyDs[i].y<shoots[u].y){enemyDs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (enemyDs[i].life<0){
+                    enemyDs.splice(i,1)
+            
+                }
+                if (round%130<30+enemyDs[i].time && round%130>0+enemyDs[i].time){
+                    enemyDs[i].speedx=0;
+                    enemyDs[i].speedy=0;
+
+                    if (round%8==4){
+                        if (enemyDs[i].y>0){
+                            enemyDs[i].fire()
+                        }
+                    }
+                }
+                else if (round%130==30+enemyDs[i].time){enemyDs[i].speedx = Math.random()*4-2;enemyDs[i].speedy = Math.random()*4-2}
+                
+            }
+        }
+
+        function createEliteA(){
+            eliteA = new EliteA(Math.random()*1000+180,Math.random()*100+20,60,20,Math.random()*4-2,0,25+wave*3,Math.floor(Math.random()*100));
+            eliteAs.push(eliteA) 
+
+        }
+        function updateEliteA(){
+            for (let i = 0;i<eliteAs.length;i++){
+                eliteAs[i].move();
+                eliteAs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (eliteAs[i].x+eliteAs[i].width>shoots[u].x && eliteAs[i].x<shoots[u].x && eliteAs[i].y+eliteAs[i].height>shoots[u].y && eliteAs[i].y<shoots[u].y){eliteAs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (eliteAs[i].life<0){
+                    eliteAs.splice(i,1)
+            
+                }
+                if (round%130<30+eliteAs[i].time && round%130>0+eliteAs[i].time){
+                    eliteAs[i].speedx=0;
+                    eliteAs[i].speedy=0;
+
+                    if (round%5==4){
+                    eliteAs[i].fire()
+                    }
+                }
+                else if (round%130==30+eliteAs[i].time){eliteAs[i].speedx = Math.random()*4-2;eliteAs[i].speedy = Math.random()*4-2}
+                
+            }
+        }
+
+
+        function createEliteB(){
+            eliteB = new EliteB(Math.random()*1000+180,Math.random()*100+20,60,20,Math.random()*4-2,0,25+wave*3,Math.floor(Math.random()*100));
+            eliteBs.push(eliteB) 
+
+        }
+        function updateEliteB(){
+            for (let i = 0;i<eliteBs.length;i++){
+
+                eliteBs[i].move();
+                eliteBs[i].update()
+
+                for (let u =0;u<shoots.length;u++){
+                    if (eliteBs[i].x+eliteBs[i].width>shoots[u].x && eliteBs[i].x<shoots[u].x && eliteBs[i].y+eliteBs[i].height>shoots[u].y && eliteBs[i].y<shoots[u].y){eliteBs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (eliteBs[i].life<0){
+                    eliteBs.splice(i,1)
+            
+                }
+                if (round%130<30+eliteBs[i].time && round%130>0+eliteBs[i].time){
+                    eliteBs[i].speedx=0;
+                    eliteBs[i].speedy=0;
+
+                    if (round%5==4){
+                    eliteBs[i].fire()
+                    }
+                }
+                else if (round%130==30+eliteBs[i].time){eliteBs[i].speedx = Math.random()*4-2;eliteBs[i].speedy = Math.random()*4-2}
+                
+            }
+        }
+
+        function createEliteC(){
+            eliteC = new EliteC(Math.random()*1000+180,Math.random()*100+20,60,20,Math.random()*4-2,0,35+wave*3,Math.floor(Math.random()*100));
+            eliteCs.push(eliteC) 
+
+        }
+        function updateEliteC(){
+            for (let i = 0;i<eliteCs.length;i++){
+                eliteCs[i].move();
+                eliteCs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (eliteCs[i].x+eliteCs[i].width>shoots[u].x && eliteCs[i].x<shoots[u].x && eliteCs[i].y+eliteCs[i].height>shoots[u].y && eliteCs[i].y<shoots[u].y){eliteCs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (eliteCs[i].life<0){
+                    eliteCs.splice(i,1)
+            
+                }
+                if (round%130<30+eliteCs[i].time && round%130>0+eliteCs[i].time){
+                    eliteCs[i].speedx=0;
+                    eliteCs[i].speedy=0;
+
+                    if (round%5==4){
+                    eliteCs[i].fire()
+                    }
+                }
+                else if (round%130==30+eliteCs[i].time){eliteCs[i].speedx = Math.random()*4-2;eliteCs[i].speedy = Math.random()*4-2}
+                
+            }
+        }
+
+        function createEliteD(){
+            eliteD = new EliteD(Math.random()*1000+180,Math.random()*100+20,60,20,Math.random()*4-2,0,45+wave*3,Math.floor(Math.random()*100));
+            eliteDs.push(eliteD) 
+
+        }
+        function updateEliteD(){
+            for (let i = 0;i<eliteDs.length;i++){
+                eliteDs[i].move();
+                eliteDs[i].update()
+                for (let u =0;u<shoots.length;u++){
+                    if (eliteDs[i].x+eliteDs[i].width>shoots[u].x && eliteDs[i].x<shoots[u].x && eliteDs[i].y+eliteDs[i].height>shoots[u].y && eliteDs[i].y<shoots[u].y){eliteDs[i].life-=damage;shoots[u].x=9999;shoots[u].y=9999}
+                }
+                if (eliteDs[i].life<0){
+                    eliteDs.splice(i,1)
+            
+                }
+                if (round%130<30+eliteDs[i].time && round%130>0+eliteDs[i].time){
+                    eliteDs[i].speedx=0;
+                    eliteDs[i].speedy=0;
+
+                    if (round%5==4){
+                    eliteDs[i].fire()
+                    }
+                }
+                else if (round%130==30+eliteDs[i].time){eliteDs[i].speedx = Math.random()*4-2;eliteDs[i].speedy = Math.random()*4-2}
+                
+            }
+        }
+
+
+
+        function checkTouch(){
+            for (let i =0;i<bullets.length;i++){
+            if (ship.x+ship.d>bullets[i].x &&ship.y+ship.d>bullets[i].y && ship.x<bullets[i].x +bullets[i].d&& ship.y<bullets[i].y+bullets[i].d){if(buff3==0){ship.hp-=1;bullets[i].x =9999;bullets[i].y=9999;}else{shield();buff3 -=1;bullets[i].y=9999;bullets[i].x=9999;}}
+            }
+            for (let i =0;i<missles.length;i++){
+            if (ship.x+ship.d>missles[i].x &&ship.y+ship.d>missles[i].y && ship.x<missles[i].x +missles[i].d&& ship.y<missles[i].y+missles[i].d){if(buff3==0){ship.hp-=1;missles[i].x =9999;missles[i].y=9999;}else{buff3 -=1;missles[i].y=9999;missles[i].x=9999;}}
+            }
+            if (ship.hp<0){
+                stop();
+            }
+        }
+        function shield(){
+            ctx = area.context;
+            ctx.fillStyle = "green"
+            // ctx.fillRect(ship.x-200,ship.y-200,400,400);
+            ctx.drawImage(shieldburstImg,ship.x-295,ship.y-500,600,800)
+
+            for (let i =0;i<bullets.length;i++){
+                if (Math.pow(Math.abs(bullets[i].x-ship.x),2)+Math.pow(Math.abs(bullets[i].y-ship.y),2)<Math.pow(400,2)){
+                    bullets[i].x =9999;
+                    bullets[i].y=9999;
+                    bullets[i].sx =0;
+                    bullets[i].sy=0;
+                }
+            }
+        }
+        function stop(){
+            shoots = []
+            bullets =  []
+            missles = []
+            booms = []
+            enemyAs = []
+            enemyBs = []
+            enemyCs = []
+            enemyDs = []
+            eliteAs = []
+            eliteBs = []
+            eliteCs = []
+            eliteDs = []
+
+            ctx = area.context
+            ctx.fillStyle = "red"
+            round = 0
+            ctx.fillRect(0,0,1370,670);
+            buff1 =false;
+            buff2 = false;
+            buff3 = 0;
+            tp = 0
+            location. reload()
+        }
+
+        function moveAll(){
+
+            for (let i = 0;i<bullets.length;i++){
+                bullets[i].move()
+                bullets[i].update()
+            }
+            for (let i = 0;i<missles.length;i++){
+                missles[i].move()
+                missles[i].update()
+                
+            }
+            
+        }
+        function reduce(){
+            if (missles.length>140){
+                missles.shift();
+            }
+            if (bullets.length>450){
+                bullets.shift();
+            }
+        }
+        function fire(){
+            if (round%4 ==2){
+                shoot = new Shoot(ship.x,ship.y,0,-15);
+                shoots.push(shoot)
+                if (buff1){
+                    shoot = new Shoot(ship.x-10,ship.y,-5,-15);
+                    shoots.push(shoot)
+                    shoot = new Shoot(ship.x+10,ship.y,5,-15);
+                    shoots.push(shoot)
+                }
+                if (buff2){
+                    shoot = new Shoot(ship.x-10,ship.y,0,-15);
+                    shoots.push(shoot)
+                    shoot = new Shoot(ship.x+10,ship.y,0,-15);
+                    shoots.push(shoot)
+                }
+                }
+                for (let i =0;i<shoots.length;i++){
+                    shoots[i].move()
+                    shoots[i].update()
+                }
+                if (shoots.length>200){
+                    shoots.shift()
+            }
+            
+            if (helper>0){
+                ctx.fillRect(ship.x-49,ship.y+5,20,20);
+            }
+            if (helper>2){
+                ctx.fillRect(ship.x-69,ship.y+15,20,20);
+            }
+            if (helper>1){
+                ctx.fillRect(ship.x+41,ship.y+5,20,20);
+            }
+            if (helper>3){
+                ctx.fillRect(ship.x+61,ship.y+15,20,20);
+            }
+            if (helper>4){
+                ctx.fillRect(ship.x+11,ship.y+40,20,20);
+            }
+            if (helper>5){
+                ctx.fillRect(ship.x-19,ship.y+40,20,20);
+            }
+            if (round%10==2){
+                if (helper>0){
+                    shoot = new Shoot(ship.x-40,ship.y+10,0,-15);
+                    shoots.push(shoot)
+                }
+                if (helper>1){
+                    shoot = new Shoot(ship.x+40,ship.y+10,0,-15);
+                    shoots.push(shoot)
+                }
+                if (helper>2){
+                    shoot = new Shoot(ship.x-60,ship.y+20,0,-15);
+                    shoots.push(shoot)
+                }
+                if (helper>3){
+                    shoot = new Shoot(ship.x+60,ship.y+20,0,-15);
+                    shoots.push(shoot)
+                }
+                if (helper>4){
+                    shoot = new Shoot(ship.x-10,ship.y+40,0,-15);
+                    shoots.push(shoot)
+                }
+                if (helper>5){
+                    shoot = new Shoot(ship.x+10,ship.y+40,0,-15);
+                    shoots.push(shoot)
+                }
+            }
+        }
+        function boomexplode(){
+            for (let i = 0;i<booms.length;i++){
+                booms[i].movebullet()
+                if (booms[i].time<round+30){
+                    booms[i].bx = booms[i].x+booms[i].sizex/2;
+                    if (booms[i].by<0){booms[i].by = 0}
+                    
+                    booms[i].bs = (booms[i].y+booms[i].sizey/2)/50;
+                    booms[i].movebullet()
+                    booms[i].update()
+                    ctx.fillStyle = "red"
+                    // ctx.fillRect(booms[i].x,booms[i].y,booms[i].sizex,booms[i].sizey)
+                    if (booms[i].by >booms[i].y+booms[i].sizey/2){
+                        booms[i].bx = 1999
+                        booms[i].by = 999
+                        booms[i].bs = 0
+                    }
+                }
+
+                if(booms[i].time<round){
+                    if(booms[i].x+booms[i].sizex>ship.x && booms[i].x<ship.x+ship.d && booms[i].y+booms[i].sizey>ship.y && booms[i].y<ship.y+ship.d){{if(buff3==0){ship.hp-=1;booms[i].x =9999;booms[i].y=9999;}else{buff3 -=1;booms[i].y=9999;booms[i].x=9999;}}}
+
+                    booms[i].x = 1999
+                    booms[i].y = 999
+
+                    
+                }
+                booms[i].update()
+
+                
+            }
+        }
+        function buffcreate(){
+            if (round%bufffreq==1){
+                buffs = []
+                buff = new Buff(Math.random()*800+200,Math.random()*300+250,Math.trunc(Math.random()*3),round)
+                buffs.push(buff)
+            }
+            for (let i = 0;i<buffs.length;i++){
+                
+                buffs[i].update()
+                buffs[i].get()
+            }
+        }
+
+        // function enemymove(){
+        //     if (round%480==1 && enemyAs.length<2 && round<2000){CreateEnemyA()}
+        //     if (round%820==1 && enemyBs.length<2 && round<2000){CreateEnemyB()}
+        //     if (round%980==1 && enemyCs.length<2 && round<2000){CreateEnemyC()}
+        //     if (round%1020==1 && enemyDs.length<2 && round<2000){CreateEnemyD()}
+        //     if (round%1800==1 && eliteAs.length<2 && round<2000){createEliteA()}
+        //     if (round%1200==1 && eliteBs.length<2 && round<2000){createEliteB()}
+        //     if (round%800==1 && eliteCs.length<2 && round<2000){createEliteC()}
+        //     if (round%1500==1 && eliteDs.length<2 && round<2000){createEliteD()}
+
+
+        //     updateEnemyA()
+        //     updateEnemyB()
+        //     updateEnemyC()
+        //     updateEnemyD()
+        //     updateEliteA()
+        //     updateEliteB()
+        //     updateEliteC()
+        //     updateEliteD()
+        //     if (round>2000&& enemyAs.length+enemyBs.length+enemyCs.length+enemyDs.length<1){ 
+        //         enemy.move()
+        //         enemy.update()
+        //         enemy.life()
+        //         if (round>2200 &&enemy.y>=-400){
+        //             for (let i = 0;i<shoots.length;i++){
+        //                 shoots[i].aim()
+        //             }
+        //         }
+        //         switch (tp){
+        //             case 0:
+        //                 enemy.createA()
+        //                 break;
+        //             case 1:
+        //                 enemy.createB()
+        //                 break;
+        //             case 2:
+        //                 enemy.createC()
+        //                 break;
+        //             case 3:
+        //                 enemy.createD()
+        //                 break;
+        //             case 4:
+        //                 enemy.createE()
+        //                 break;
+        //             case 5:
+        //                 enemy.createF()
+        //                 break;
+        //         }
+        //     }
+        // }
+
+        function enemymove(){
+            if (wave ==0 && wave0 ==0){
+                CreateEnemyA()
+                CreateEnemyA()
+                CreateEnemyA()
+                wave0=1;
+            }
+            if (wave ==1 && wave1 ==0){
+                CreateEnemyA()
+                CreateEnemyA()
+                CreateEnemyB()
+                CreateEnemyC()
+                CreateEnemyB()
+                CreateEnemyC()
+                wave1=1;
+            }
+            if (wave ==2 && wave2 ==0){
+                CreateEnemyA()
+                CreateEnemyB()
+                CreateEnemyC()
+                CreateEnemyD()
+                CreateEnemyA()
+                CreateEnemyB()
+                CreateEnemyC()
+                CreateEnemyD()
+                wave2=1;
+            }
+            if (wave ==3 && wave3 ==0){
+                CreateEnemyB()
+                CreateEnemyB()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyA()
+                CreateEnemyD()
+                CreateEnemyD()
+                wave3=1;
+            }
+            if (wave ==4 && wave4 ==0){
+                CreateEnemyD()
+                CreateEnemyD()
+                CreateEnemyD()
+                CreateEnemyD()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                wave4=1;
+            }
+            if (wave ==5 && wave5 ==0){
+                createEliteA()
+                createEliteA()
+                wave5=1;
+            }
+            if (wave ==6 && wave6 ==0){
+                createEliteB()
+                createEliteB()
+                wave6=1;
+            }
+            if (wave ==7 && wave7 ==0){
+                createEliteC()
+                createEliteC()
+                wave7=1;
+            }
+            if (wave ==8 && wave8 ==0){
+                createEliteD()
+                createEliteD()
+                wave8=1;
+            }
+            if (wave ==9 && wave9 ==0){
+                createEliteA()
+                createEliteB()
+                createEliteC()
+                createEliteD()
+                wave9=1;
+            }
+            if (wave ==10 && wave10 ==0){
+                createEliteB()
+                createEliteB()
+                createEliteC()
+                createEliteC()
+                createEliteD()
+                createEliteD()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                wave10=1;
+            }
+            if (wave ==10 && wave10 ==0){
+                createEliteC()
+                createEliteC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                CreateEnemyC()
+                wave10=1;
+            }
+            if (wave ==11 && wave11 ==0){
+                createEliteA()
+                createEliteA()
+                createEliteA()
+                createEliteA()
+                createEliteA()
+                createEliteA()
+                createEliteA()
+                createEliteA()
+                wave11=1;
+            }
+            if (wave ==12 && wave12 ==0){
+                createEliteC()
+                createEliteC()
+                createEliteC()
+                createEliteC()
+                createEliteB()
+                createEliteB()
+                createEliteD()
+                createEliteD()
+                wave12=1;
+            }
+            if (wave ==13 && wave13 ==0){
+                createEliteD()
+                createEliteD()
+                createEliteD()
+                createEliteD()
+                wave13=1;
+            }
+            if (wave ==14 && wave14 ==0){
+                createEliteA();
+                createEliteA();
+                createEliteB();
+                createEliteB();
+                createEliteC();
+                createEliteC();
+                createEliteD();
+                createEliteD();
+                CreateEnemyA()
+                CreateEnemyB()
+                CreateEnemyC()
+                CreateEnemyD()
+                CreateEnemyA()
+                CreateEnemyB()
+                CreateEnemyC()
+                CreateEnemyD()
+                wave14=1;
+            }
+            if (wave ==15){
+                enemy.move()
+                enemy.update()
+                enemy.life()
+                if (enemy.y>=-400){
+                    for (let i = 0;i<shoots.length;i++){
+                        shoots[i].aim()
+                    }
+                }
+                switch (tp){
+                    case 0:
+                        enemy.createA()
+                        break;
+                    case 1:
+                        enemy.createB()
+                        break;
+                    case 2:
+                        enemy.createC()
+                        break;
+                    case 3:
+                        enemy.createD()
+                        break;
+                    case 4:
+                        enemy.createE()
+                        break;
+                    case 5:
+                        enemy.createF()
+                        break;
+                }
+            }
+            updateEnemyA()
+            updateEnemyB()
+            updateEnemyC()
+            updateEnemyD()
+            updateEliteA()
+            updateEliteB()
+            updateEliteC()
+            updateEliteD()
+            
+        }
+        function up1(){
+            ship.sx+=1;
+            ship.sy+=1;
+        }
+        function up2(){
+            ship.maxhp*=1.5;
+            ship.hp = ship.maxhp;
+            hprecove /=2;
+        }
+        function up3(){
+            damage +=1;
+        }
+        function up4(){
+            helper+=1
+        }
+        function up5(){
+            bufffreq-=bufffreq*0.4;
+            bufftime+=bufftime*0.5;
+        }
+
+        function upgrade(){
+            if (enemyAs.length+enemyBs.length+enemyCs.length+enemyDs.length+eliteAs.length+eliteBs.length+eliteCs.length+eliteDs.length<1){
+                if (wave<15){
+                    if (slice ==0){
+                        slice = round+200;
+                    }
+                    if (slice<round){
+                        slice =0
+                        wave+=1;
+                        if (ship.x<273){
+                            up1();
+                        }
+                        if (ship.x>273 && ship.x<546){
+                            up2();
+                        }
+                        if (ship.x>546 && ship.x<819){
+                            up3();
+                        }
+                        if (ship.x>819 && ship.x<1092){
+                            up4();
+                        }
+                        if (ship.x>1092){
+                            up5();
+                        }
+                        
+                    }
+                    ctx.fillStyle = "red"
+                    ctx.fillRect(0,350,273,1000);
+                    ctx.fillStyle = "blue"
+                    ctx.fillRect(273,350,273,1000);
+                    ctx.fillStyle = "yellow"
+                    ctx.fillRect(546,350,273,1000);
+                    ctx.fillStyle = "green"
+                    ctx.fillRect(819,350,273,1000);
+                    ctx.fillStyle = "purple"
+                    ctx.fillRect(1092,350,273,1000);
+                    ctx.fillStyle = "black"
+                    ctx.fillText("Speed +",80,500)
+                    ctx.fillText("HP +",370,500)
+                    ctx.fillText("damage +",600,500)
+                    ctx.fillText("helper +",880,500)
+                    ctx.fillText("Buff +",1180,500)
+                }
+            }
+        }
+
+        function updateBar(){
+            ctx.fillStyle = "gray"
+            ctx.fillRect(1330,80,10,500)
+            ctx.fillStyle = "blue"
+            ctx.fillRect(1330,580,10,-wave/15*(500))
+            ctx.drawImage(shipImg,1320,580-wave/15*(500)-30,30,55)
+        }
+        function updateArea(){
+            round+=1;
+            area.clear()
+            
+            ctx.font = "40px Arial"
+            moveAll();
+            reduce();
+            buffcreate();
+            enemymove();
+            boomexplode()
+            checkTouch();
+            upgrade()
+            fire();
+            ship.move()
+            ship.update()
+            updateBar();
+
+
+        }
+    </script>
+</body>
+</html>

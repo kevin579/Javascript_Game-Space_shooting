@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript" src="mainfunction.js"></script>
+    <script type="text/javascript" src="mainvariables.js"></script>
+    <script type="text/javascript" src="image.html"></script>
+    <script type="text/javascript" src="mainobjects.js"></script>
+
+
+    <style>
+        canvas {
+            position:fixed;
+        }
+        body {
+            margin:0;
+            background-image: url("background.jpg");
+        }
+    </style>
+</head>
+<body onload = "startGame()">
+    <img src = "ship.png" width = "0" height = "0" id = "ship">
+    <img src = "supship.png" width = "0" height = "0" id = "supship">
+    <img src = "bullet.png" width = "0" height  = "0" id = "bullet">
+    <img src = "bullet2.png" width = "0" height = "0" id = "bullet2">
+    <img src = "bullet3.png" width = "0" height = "0" id = "bullet3">
+    <img src = "enemy.png" width = "0" height = "0" id = "enemy">
+    <img src = "enemyA.png" width = "0" height = "0" id = "enemyA">
+    <img src = "enemyB.png" width = "0" height = "0" id = "enemyB">
+    <img src = "enemyC.png" width = "0" height = "0" id = "enemyC">
+    <img src = "enemyD.png" width = "0" height = "0" id = "enemyD">
+    <img src = "eliteA.png" width = "0" height = "0" id = "eliteA">
+    <img src = "eliteB.png" width = "0" height = "0" id = "eliteB">
+    <img src = "eliteC.png" width = "0" height = "0" id = "eliteC">
+    <img src = "eliteD.png" width = "0" height = "0" id = "eliteD">
+    <img src = "explode.png" width = "0" height = "0" id = "explode">
+    <img src = "shoot.png" width = "0" height = "0" id = "shoot">
+    <img src = "shoot2.png" width = "0" height = "0" id = "shoot2">
+    <img src = "shoot3.png" width = "0" height = "0" id = "shoot3">
+    <img src = "shoot4.png" width = "0" height = "0" id = "shoot4">
+    <img src = "shoot5.png" width = "0" height = "0" id = "shoot5">
+    <img src = "shoot6.png" width = "0" height = "0" id = "shoot6">
+    <img src = "shoot7.png" width = "0" height = "0" id = "shoot7">
+    <img src = "sup.png" width = "0" height = "0" id = "sup">
+    <img src = "warning.png" width = "0" height = "0" id = "warning">
+    <img src = "nucup.png" width = "0" height = "0" id = "nucup">
+    <img src = "nucdown.png" width = "0" height = "0" id = "nucdown">
+    <img src = "buff1.png" width = "0" height = "0" id = "buff1">
+    <img src = "buff2.png" width = "0" height = "0" id = "buff2">
+    <img src = "shield.png" width = "0" height = "0" id = "buff3">
+    <img src = "shieldburst.png" width = "0" height = "0" id = "shieldburst">
+    <img src = "lead.png" width = "0" height = "0" id = "lead">
+    <img src = "helper.png" width = "0" height = "0" id = "helper">
+
+
+    <script> 
+        var shipImg = document.getElementById("ship");
+        var bulletImg = document.getElementById("bullet");
+        var bullet2Img = document.getElementById("bullet2");
+        var bullet3Img = document.getElementById("bullet3");
+        var enemyImg = document.getElementById("enemy");
+        var enemyAImg = document.getElementById("enemyA");
+        var enemyBImg = document.getElementById("enemyB");
+        var enemyCImg = document.getElementById("enemyC");
+        var enemyDImg = document.getElementById("enemyD");
+        var eliteAImg = document.getElementById("eliteA");
+        var eliteBImg = document.getElementById("eliteB");
+        var eliteCImg = document.getElementById("eliteC");
+        var eliteDImg = document.getElementById("eliteD");
+        var explodeImg = document.getElementById("explode");
+        var shootImg = document.getElementById("shoot");
+        var shoot2Img = document.getElementById("shoot2");
+        var shoot3Img = document.getElementById("shoot3");
+        var shoot4Img = document.getElementById("shoot4");
+        var shoot5Img = document.getElementById("shoot5");
+        var shoot6Img = document.getElementById("shoot6");
+        var shoot7Img = document.getElementById("shoot7");
+        var helperImg = document.getElementById("helper");
+        var supEnemyImg = document.getElementById("sup");
+        var warningImg = document.getElementById("warning");
+        var nucupImg = document.getElementById("nucup");
+        var nucdownImg = document.getElementById("nucdown");
+        var supshipImg = document.getElementById("supship");
+        var buff1Img = document.getElementById("buff1");
+        var buff2Img = document.getElementById("buff2");
+        var buff3Img = document.getElementById("buff3");
+        var shieldburstImg = document.getElementById("shieldburst");
+        var leadImg = document.getElementById("lead");
+
+        
+        function updateArea(){
+            round+=1;
+            area.clear()
+            if (difficult ==0){
+                preStart()
+            }
+            else{ 
+                ctx.font = "40px Arial"
+                moveAll();
+                reduce();
+                buffcreate();
+                enemymove();
+                boomexplode()
+                checkTouch();
+                upgrade()
+                fire();
+                ship.move()
+                ship.update()
+                updateBar();
+            }
+        }
+    </script>
+</body>
+</html>
