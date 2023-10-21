@@ -1,3 +1,3 @@
 # Space_shooting
 A web page space shooting game made by JavaScript
-\nDownload to use
+## Download as zip, unzip, and run the file "main.html"
