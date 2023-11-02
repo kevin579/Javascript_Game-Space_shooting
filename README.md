@@ -21,7 +21,7 @@ There are 5 waves in total, and the boss have 1/2 the Hp than normal.
 There are 10 waves in total, and the boss have its normal life.
 
 ### Hard
-There are 15 waves in total, and the boss have 1/2 the Hp than normal.
+There are 15 waves in total, and the boss have double the Hp than normal.
 
 ### Infinity
 There will be unlimited waves of enemies that are randomly generated each wave. There will be no boss at the end but the enemies are growing more and more.
