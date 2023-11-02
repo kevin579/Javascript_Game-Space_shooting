@@ -30,7 +30,21 @@ There will be unlimited waves of enemies that are randomly generated each wave. 
 After you defeat all enemies on your screen, you finished your current wave.
 <br>
 Every time you finish your wave, you have a chance to upgrade your ship. There are 5 types of upgrades
+### Speed
+Increase your speed
 ### Health
 Recover all your health, increase maximum health and helth recover rate.
 ### Damage
 Upgrade your cannon and you will cause more damage on enemies
+### Helper
+You will receive a helper that can help you shoot your enemies. The helper have the same danmage as you but shoots slower. There is a maximum number of helpers you can get.
+### Buff
+Increase the frequency and lasting time for the buffs you can get.
+<br>
+## Buff
+There are 3 types of buff you can get from the background.
+<br>
+1. Triple shooting. You shoots bullets three times faster than normal.
+2. Spread shooting. You will shoot two extra bullets that have an angle with the main bullet
+3. Sheild. You can get a sheild that can protect you from an attack and clear all the bullets around you. You can have multiple sheilds at the same time.
+
